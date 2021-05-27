@@ -10,3 +10,7 @@ class User(AbstractUser):
     def update_last_login(self):
         self.last_login = now()
         self.save()
+
+    def likes_number_per_date(self, from_date=now(), to_date=now()):
+        likes_count = self.likes.objects.filter(user=self).filter(aboutme__birthday__range=(from_date, to_date)).count()
+        return likes_count
