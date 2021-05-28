@@ -3,8 +3,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
-from posts.models import Post
-from posts.serializers import CreatePostSerializer
+from posts.models import Post, Like
+from posts.serializers import CreatePostSerializer, PostSerializer
 
 
 class CreatePostView(generics.CreateAPIView):
@@ -30,11 +30,24 @@ class CreatePostView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class LikePostView(APIView):
-    def get(self, request, format=None):
-        return Response({"status": "OK"})
+class BasePostView(generics.GenericAPIView):
+    model = Post
+    serializer_class = PostSerializer
 
 
-class UnLikePostView(APIView):
-    def get(self, request, format=None):
-        return Response({"status": "OK"})
+class LikePostView(BasePostView):
+    def post(self, request, pk):
+        serializer = self.serializer_class(data={'pk': pk})
+        serializer.is_valid(raise_exception=True)
+        serializer.like(request.user.pk)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class UnLikePostView(BasePostView):
+    def post(self, request, pk):
+        serializer = self.serializer_class(data={'pk': pk})
+        serializer.is_valid(raise_exception=True)
+        serializer.unlike(request.user.pk)
+
+        return Response(status=status.HTTP_201_CREATED)

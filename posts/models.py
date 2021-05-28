@@ -12,13 +12,13 @@ class Post(models.Model):
     body = models.TextField(verbose_name='Body')
     created_at = models.DateTimeField(default=now)
 
-    def add_like(self, user):
+    def like(self, user):
         like, is_created = Like.objects.get_or_create(post=self,
                                                       user=user)
         return like
 
     # remove like to article(obj)
-    def remove_like(self, user):
+    def unlike(self, user):
         Like.objects.filter(post=self,
                             user=user
                             ).delete()
