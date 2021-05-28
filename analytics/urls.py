@@ -16,6 +16,7 @@ class DateConverter:
         return value
 
 
+# convert parameter to date
 register_converter(DateConverter, 'yyyy')
 
 app_name = 'analytics'

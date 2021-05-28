@@ -15,9 +15,10 @@ class CreatePostView(generics.CreateAPIView):
     def get_data_from_request(request):
         data = dict(request.data)
         data['user'] = request.user.pk
-        if data['title'] and data['title'] is list:
+        # because the parameters can be sent as an list and it's not valid
+        if data['title'] and type(data['title']) is list:
             data['title'] = data['title'][0]
-        if data['body'] and data['body'] is list:
+        if data['body'] and type(data['body']) is list:
             data['body'] = data['body'][0]
         return data
 
