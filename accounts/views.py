@@ -21,7 +21,3 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-
-class LikesCountView(APIView):
-    def get(self, request, date_from=None, date_to=None, format=None):
-        return Response({"status": "OK"})
